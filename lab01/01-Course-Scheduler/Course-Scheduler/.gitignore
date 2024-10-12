@@ -27,6 +27,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
 /.idea/
 Course-Scheduler.iml
 /.gitignore
