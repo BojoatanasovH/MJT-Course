@@ -1,4 +1,4 @@
-public class Main {
+public class CourseScheduler {
     public static void CustomSort(int[][] courses) {
         for (int i = 0; i <= courses.length - 1; i++) {
             for (int j = i + 1; j < courses.length; j++) {
