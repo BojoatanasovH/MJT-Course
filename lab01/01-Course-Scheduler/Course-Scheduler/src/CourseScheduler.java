@@ -2,7 +2,7 @@ public class CourseScheduler {
     public static void CustomSort(int[][] courses) {
         for (int i = 0; i <= courses.length - 1; i++) {
             for (int j = i + 1; j < courses.length; j++) {
-                if (courses[i][0] > courses[j][0]) {
+                if (courses[i][1] > courses[j][1]) {
                     int[] temp = courses[i];
                     courses[i] = courses[j];
                     courses[j] = temp;
@@ -18,10 +18,10 @@ public class CourseScheduler {
         }
         int end = courses[0][1];
         int count = 1;
-        for(int[] course : courses){
-            if (course[0] >= end){
+        for(int i = 1; i < courses.length; i++){
+            if (courses[i][0] >= end){
                 count++;
-                end = course[1];
+                end = courses[i][1];
             }
         }
         return count;
