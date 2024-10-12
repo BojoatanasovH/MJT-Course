@@ -10,7 +10,7 @@ public class CourseScheduler {
             }
         }
     }
-
+    
     public static int maxNonOverlappingCourses(int[][] courses) {
         CustomSort(courses);
         if (courses.length == 0) {
