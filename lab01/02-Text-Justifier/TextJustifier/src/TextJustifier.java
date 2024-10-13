@@ -1,68 +1,104 @@
 import java.util.Arrays;
 
 public class TextJustifier {
-    public static String[] justifyText(String[] words, int maxWidth){
-        String[] res = new String[words.length];
-        int resIndex = 0;
-        int wordCount = 0;
+
+    public static String addSpaces(String row, int maxWidth, boolean last){
+        row = row.strip();
+        int spaceCount = 0;
+        int n = row.length();
+        for (int i = 0; i < n; i++) {
+            if (row.charAt(i) == ' '){
+                spaceCount++;
+            }
+        }
+        String spaces = "";
+
+        String[] words = row.split(" ");
+        for (int i = 0; i < words.length - 1; i++) {
+            words[i] += " ";
+        }
+
+        if(last || spaceCount == 0){
+            for (int i = n; i < maxWidth; i++) {
+                row += " ";
+            }
+        }
+        else if (spaceCount == 1) {
+            while (n < maxWidth) {
+                spaces += " ";
+                n++;
+            }
+            row = words[0] + spaces + words[1];
+        }
+        else {
+            row = "";
+            int index = 0;
+            for (int i = 0; i < words.length; i++) {
+                row += words[i];
+            }
+            int currentLength = row.length();
+            while(maxWidth - currentLength > 0){
+
+                if (index == words.length - 1) {
+                    index = 0;
+                }
+                words[index++] += " ";
+                currentLength++;
+            }
+            row = "";
+            for (int i = 0; i < words.length; i++) {
+                row += words[i];
+            }
+        }
+        return row;
+    }
+
+    public static String[] justifyText(String[] words, int maxWidth) {
+        int LineLength = 0;
         int index = 0;
-        while (index < words.length) {
-            int lineLength = words[index].length();
-            int last = index + 1;
+        String[] res = new String[words.length];
+        StringBuilder line = new StringBuilder();
+        int i = 0;
+        int lineCount = 0;
+        for (int j = 0; j < words.length; j++) {
+            while (i < words.length && LineLength + words[i].length() <= maxWidth) {
+                LineLength += words[i].length() + 1;
+                line.append(words[i]);
+                line.append(" ");
+                i++;
+            }
 
-            while (last < words.length && lineLength + words[last].length() + (last - index) <= maxWidth) {
-                lineLength += words[last].length();
-                last++;
-            }
-            StringBuilder Line = new StringBuilder();
-            int spaces = maxWidth - lineLength;
-            int wordsCount = last - index;
-
-            if (last == words.length || wordCount == 1){
-                for(int i = index; i < last; i++){
-                    Line.append(words[i]);
-                    if (i < last - 1){
-                        Line.append(" ");
-                    }
-                }
-                while(Line.length() < maxWidth){
-                    Line.append(" ");
-                }
-            }
-            else{
-                int even = spaces % (wordsCount);
-                int extra = spaces / (wordsCount);
-                for (int i = index; i < last; i++) {
-                    Line.append(words[i]);
-                    if (i < last - 1){
-                        for (int k = 0; k < even; k++) {
-                            Line.append(" ");
-                        }
-                        if(extra > 0){
-                            Line.append(" ");
-                            extra--;
-                        }
-                    }
-                    
-                }
-            }
-            res[resIndex++] = Line.toString();
-            index = last;
-        }
-        String[] finalres = new String[resIndex];
-        for (int i = 0; i < resIndex; i++) {
-            finalres[i] = res[i];
+            res[index++] = line.toString();
+            LineLength = 0;
+            lineCount++;
+            line = new StringBuilder();
+            if (i >= words.length)
+                break;
         }
 
-        return finalres;
+        String[] finalRes = new String[lineCount];
+        for (int j = 0; j < lineCount; j++) {
+            boolean last = j == (lineCount - 1);
+            finalRes[j] = addSpaces(res[j], maxWidth, last);
+        }
+        return finalRes;
     }
 
     public static void main(String[] args) {
         String[] words = {"The", "quick", "brown", "fox", "jumps", "over", "the", "lazy", "dog." };
         String[] res = justifyText(words, 11);
-        System.out.println(Arrays.toString(res));
+        for (int i = 0; i < res.length; i++) {
+            System.out.println("|" + res[i] + "|");
+        }
         String[] words1 = {"Science", "is", "what", "we", "understand", "well", "enough", "to", "explain", "to", "a", "computer."};
         String[] res1 = justifyText(words1, 20);
-        System.out.println(Arrays.toString(res1));
+        for (int i = 0; i < res1.length; i++) {
+            System.out.println("|" + res1[i] + "|");
+        }
+        String[] test = {"what", "must", "be", "understanding"};
+        String[] test1 = justifyText(test, 16);
+        for (int i = 0; i < test1.length; i++) {
+            System.out.println("|" + test1[i] + "|");
+        }
     }
 }
