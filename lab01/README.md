@@ -1,1 +1,1 @@
-# Modern Java Technologies @ FMI
+# Lab 01
