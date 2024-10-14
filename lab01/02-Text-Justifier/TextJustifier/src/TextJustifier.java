@@ -1,7 +1,6 @@
 import java.util.Arrays;
 
 public class TextJustifier {
-
     public static String addSpaces(String row, int maxWidth, boolean last){
         row = row.strip();
         int spaceCount = 0;
@@ -11,7 +10,6 @@ public class TextJustifier {
                 spaceCount++;
             }
         }
-        String spaces = "";
 
         String[] words = row.split(" ");
         for (int i = 0; i < words.length - 1; i++) {
@@ -22,13 +20,6 @@ public class TextJustifier {
             for (int i = n; i < maxWidth; i++) {
                 row += " ";
             }
-        }
-        else if (spaceCount == 1) {
-            while (n < maxWidth) {
-                spaces += " ";
-                n++;
-            }
-            row = words[0] + spaces + words[1];
         }
         else {
             row = "";
