@@ -26,19 +26,22 @@ public final class Caravan extends Vehicle {
 
     @Override
     public double calculateRentalPrice(LocalDateTime startOfRent, LocalDateTime endOfRent)
-            throws InvalidRentingPeriodException {
+        throws InvalidRentingPeriodException {
         long days = ChronoUnit.DAYS.between(startOfRent, endOfRent);
         if (days < 1) {
             throw new InvalidRentingPeriodException("Caravans must be rented for at least one day.");
         }
 
-        long weeks = days / 7;
-        days = days % 7;
+        final int daysInWeek = 7;
+        final int priceOfSeat = 5;
+        final int priceOfBed = 10;
+
+        long weeks = days / daysInWeek;
+        days = days % daysInWeek;
 
         double totalPrice = weeks * pricePerWeek + days * pricePerDay;
-        totalPrice += fuelType.getDailyFee() * (weeks * 7 + days);
-        totalPrice += numberOfSeats * 5 + numberOfBeds * 10;
-
+        totalPrice += fuelType.getDailyFee() * (weeks * daysInWeek + days);
+        totalPrice += numberOfSeats * priceOfSeat + numberOfBeds * priceOfBed;
 
         totalPrice += getDriverFee(this.rentedBy);
         return totalPrice;

@@ -54,7 +54,7 @@ public class RentalService {
      *                                       does not allow the passed period for rental, e.g. Caravans must be rented for at least a day.
      */
     public double returnVehicle(Vehicle vehicle, LocalDateTime endOfRent)
-            throws InvalidRentingPeriodException {
+        throws InvalidRentingPeriodException {
         if (vehicle == null || endOfRent == null) {
             throw new IllegalArgumentException("Arguments are null!");
         }

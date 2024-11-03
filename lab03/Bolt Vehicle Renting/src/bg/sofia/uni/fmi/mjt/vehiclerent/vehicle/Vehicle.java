@@ -17,7 +17,6 @@ public abstract sealed class Vehicle permits Bicycle, Car, Caravan {
         return this.rentedBy;
     }
 
-
     public Vehicle(String id, String model) {
         this.id = id;
         this.model = model;
@@ -44,7 +43,8 @@ public abstract sealed class Vehicle permits Bicycle, Car, Caravan {
      *                                       in case the Vehicle does not allow the passed period for rental, e.g. Caravans must be rented for at least a day
      *                                       and the driver tries to return them after an hour.
      */
-    public void returnBack(LocalDateTime rentalEnd) throws InvalidRentingPeriodException, VehicleNotRentedException, IllegalArgumentException {
+    public void returnBack(LocalDateTime rentalEnd)
+        throws InvalidRentingPeriodException, VehicleNotRentedException, IllegalArgumentException {
         if (rentedBy == null) {
             throw new VehicleNotRentedException("Vehicle is not rented.");
         }
@@ -66,16 +66,19 @@ public abstract sealed class Vehicle permits Bicycle, Car, Caravan {
      *                                       the period is not valid (end date is before start date)
      */
     public abstract double calculateRentalPrice(LocalDateTime startOfRent, LocalDateTime endOfRent)
-            throws InvalidRentingPeriodException;
+        throws InvalidRentingPeriodException;
 
     public LocalDateTime getStartRentTime() {
         return this.startRentTime;
     }
 
     public double getDriverFee(Driver driver) {
+        final double juniorFee = 10.0;
+        final double seniorFee = 15.0;
+
         return switch (driver.ageGroup()) {
-            case JUNIOR -> 10.0;
-            case SENIOR -> 15.0;
+            case JUNIOR -> juniorFee;
+            case SENIOR -> seniorFee;
             case EXPERIENCED -> 0.0;
         };
     }

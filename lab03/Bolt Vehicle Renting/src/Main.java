@@ -9,7 +9,8 @@ import bg.sofia.uni.fmi.mjt.vehiclerent.vehicle.FuelType;
 import bg.sofia.uni.fmi.mjt.vehiclerent.vehicle.Vehicle;
 
 
-public static void main(String[] args) throws VehicleAlreadyRentedException, VehicleNotRentedException, InvalidRentingPeriodException {
+public static void main(String[] args)
+    throws VehicleAlreadyRentedException, VehicleNotRentedException, InvalidRentingPeriodException {
     RentalService rentalService = new RentalService();
     LocalDateTime rentStart = LocalDateTime.of(2024, 10, 10, 0, 0, 0);
     Driver experiencedDriver = new Driver(AgeGroup.EXPERIENCED);

@@ -17,14 +17,17 @@ public final class Bicycle extends Vehicle {
 
     @Override
     public double calculateRentalPrice(LocalDateTime startOfRent, LocalDateTime endOfRent)
-            throws InvalidRentingPeriodException {
-        long hours = ChronoUnit.HOURS.between(startOfRent, endOfRent);
-        long days = hours / 24;
+        throws InvalidRentingPeriodException {
+        final int hoursInDay = 24;
+        final int daysInWeek = 7;
 
-        if (days > 6) {
+        long hours = ChronoUnit.HOURS.between(startOfRent, endOfRent);
+        long days = hours / hoursInDay;
+
+        if (days > (daysInWeek - 1)) {
             throw new InvalidRentingPeriodException("Bicycles cannot be rented for more than a week.");
         }
-        hours = hours % 24;
+        hours = 0L;
 
         return days * pricePerDay + hours * pricePerHour;
     }
