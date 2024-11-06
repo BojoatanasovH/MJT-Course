@@ -47,29 +47,31 @@ public class SocialFeedPost implements Post {
     @Override
     public boolean addReaction(UserProfile userProfile, ReactionType reactionType) {
         if (userProfile == null || reactionType == null) {
-            throw new IllegalArgumentException("User and reaction cannot be null!");
+            throw new IllegalArgumentException("User profile or reaction type cannot be null");
         }
-        reactions.putIfAbsent(reactionType, new HashSet<>());
-        Set<UserProfile> reactionUsers = reactions.get(reactionType);
-        boolean updated = !reactionUsers.contains(userProfile);
-        reactionUsers.add(userProfile);
-        return updated;
+        boolean isUpdated = removeReaction(userProfile);
+
+        reactions.computeIfAbsent(reactionType, k -> new HashSet<>()).add(userProfile);
+        return !isUpdated;
     }
 
     @Override
     public boolean removeReaction(UserProfile userProfile) {
         if (userProfile == null) {
-            throw new IllegalArgumentException("User profile cannot be null!");
+            throw new IllegalArgumentException("User profile cannot be null");
         }
-        boolean reactionRemoved = false;
-
-        for (Set<UserProfile> userProfiles : reactions.values()) {
-            if (userProfiles.contains(userProfile)) {
-                userProfiles.remove(userProfile);
-                reactionRemoved = true;
+        boolean removed = false;
+        for (ReactionType type : ReactionType.values()) {
+            Set<UserProfile> profiles = reactions.get(type);
+            if (profiles != null && profiles.remove(userProfile)) {
+                removed = true;
+                if (profiles.isEmpty()) {
+                    reactions.remove(type);
+                }
             }
         }
-        return reactionRemoved;
+
+        return removed;
     }
 
     @Override

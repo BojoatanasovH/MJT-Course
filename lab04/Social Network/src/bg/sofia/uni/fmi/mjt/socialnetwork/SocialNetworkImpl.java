@@ -3,6 +3,7 @@ package bg.sofia.uni.fmi.mjt.socialnetwork;
 import bg.sofia.uni.fmi.mjt.socialnetwork.exception.UserRegistrationException;
 import bg.sofia.uni.fmi.mjt.socialnetwork.post.Post;
 import bg.sofia.uni.fmi.mjt.socialnetwork.post.SocialFeedPost;
+import bg.sofia.uni.fmi.mjt.socialnetwork.profile.Interest;
 import bg.sofia.uni.fmi.mjt.socialnetwork.profile.UserProfile;
 
 import java.util.ArrayList;
@@ -10,6 +11,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -61,18 +64,42 @@ public class SocialNetworkImpl implements SocialNetwork {
     @Override
     public Set<UserProfile> getReachedUsers(Post post) {
         if (post == null) {
-            throw new IllegalArgumentException("Post cannot be null!");
+            throw new IllegalArgumentException("Post cannot be null");
         }
         Set<UserProfile> reachedUsers = new HashSet<>();
+        Queue<UserProfile> queue = new LinkedList<>();
+        Set<UserProfile> visited = new HashSet<>();
         UserProfile author = post.getAuthor();
-        for (UserProfile user : users) {
-            if (user != author &&
-                (user.isFriend(author) || !Collections.disjoint(user.getInterests(), author.getInterests()) ||
-                    !Collections.disjoint(user.getFriends(), author.getFriends()))) {
-                reachedUsers.add(user);
+
+        queue.add(author);
+        visited.add(author);
+
+        while (!queue.isEmpty()) {
+            UserProfile current = queue.poll();
+
+            for (UserProfile friend : current.getFriends()) {
+                if (!visited.contains(friend)) {
+                    visited.add(friend);
+                    queue.add(friend);
+
+                    if (hasCommonInterest(author, friend)) {
+                        reachedUsers.add(friend);
+                    }
+                }
             }
         }
+
         return reachedUsers;
+    }
+
+    // Метод за проверка на общ интерес между двама потребители
+    private boolean hasCommonInterest(UserProfile user1, UserProfile user2) {
+        for (Interest interest : user1.getInterests()) {
+            if (user2.getInterests().contains(interest)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
