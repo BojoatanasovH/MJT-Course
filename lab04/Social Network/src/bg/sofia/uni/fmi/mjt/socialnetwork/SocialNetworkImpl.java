@@ -118,7 +118,7 @@ public class SocialNetworkImpl implements SocialNetwork {
 
     @Override
     public SortedSet<UserProfile> getAllProfilesSortedByFriendsCount() {
-        SortedSet<UserProfile> sortedProfiles = new TreeSet<>(new Comparator<UserProfile>() {
+        SortedSet<UserProfile> sortedProfiles = new TreeSet<>(new Comparator<>() {
             @Override
             public int compare(UserProfile u1, UserProfile u2) {
                 int friendsCountComparison = Integer.compare(u2.getFriends().size(), u1.getFriends().size());
