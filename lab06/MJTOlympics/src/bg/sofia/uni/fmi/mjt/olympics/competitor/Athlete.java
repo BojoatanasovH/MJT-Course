@@ -69,8 +69,8 @@ public class Athlete implements Competitor {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Athlete athlete = (Athlete) o;
-        return Objects.equals(name, athlete.name) && Objects.equals(nationality, athlete.nationality) &&
-            Objects.equals(medals, athlete.medals);
+        return Objects.equals(identifier, athlete.identifier) && Objects.equals(name, athlete.name) &&
+            Objects.equals(nationality, athlete.nationality);
     }
 
     @Override

@@ -57,25 +57,53 @@ class MJTOlympicsTest {
 
     @Test
     void testNationsRankListWithTiedMedalCounts() {
-        TreeSet<Competitor> ranking = new TreeSet<>(Comparator.comparing(Competitor::getName));
-        ranking.add(new Athlete("1", "Athlete A", "NationA")); // Gold
-        ranking.add(new Athlete("2", "Athlete B", "NationB")); // Silver
+        Set<Competitor> registeredCompetitors = new HashSet<>();
+        Athlete athleteA = new Athlete("1", "Athlete A", "NationA"); // Gold in Cycling, Silver in Running
+        Athlete athleteB = new Athlete("2", "Athlete B", "NationB"); // Silver in Cycling
+        Athlete athleteC = new Athlete("3", "Athlete C", "NationC"); // Gold in Running
+        registeredCompetitors.add(athleteA);
+        registeredCompetitors.add(athleteB);
+        registeredCompetitors.add(athleteC);
 
-        Competition competition = new Competition("Olympics", "Cycling", competitors);
-        when(competitionResultFetcher.getResult(competition)).thenReturn(ranking);
+        mjtOlympics = new MJTOlympics(registeredCompetitors, competitionResultFetcher);
 
-        mjtOlympics.updateMedalStatistics(competition);
+        Set<Competitor> competitorsCycling = new HashSet<>();
+        competitorsCycling.add(athleteA);
+        competitorsCycling.add(athleteB);
 
-        ranking.clear();
-        ranking.add(new Athlete("3", "Athlete C", "NationC")); // Gold
-        ranking.add(new Athlete("1", "Athlete A", "NationA")); // Silver
+        Competition cyclingCompetition = new Competition("Olympics", "Cycling", competitorsCycling);
+        TreeSet<Competitor> cyclingResults = new TreeSet<>(new Comparator<>() {
+            @Override
+            public int compare(Competitor c1, Competitor c2) {
+                return c1.getIdentifier().compareTo(c2.getIdentifier());
+            }
+        });
+        cyclingResults.add(athleteA); // Gold
+        cyclingResults.add(athleteB); // Silver
+        when(competitionResultFetcher.getResult(cyclingCompetition)).thenReturn(cyclingResults);
 
-        Competition competition2 = new Competition("Olympics", "Running", competitors);
-        when(competitionResultFetcher.getResult(competition2)).thenReturn(ranking);
+        mjtOlympics.updateMedalStatistics(cyclingCompetition);
 
-        mjtOlympics.updateMedalStatistics(competition2);
+        Set<Competitor> competitorsRunning = new HashSet<>();
+        competitorsRunning.add(athleteA);
+        competitorsRunning.add(athleteC);
+
+        Competition runningCompetition = new Competition("Olympics", "Running", competitorsRunning);
+        TreeSet<Competitor> runningResults = new TreeSet<>(new Comparator<>() {
+            @Override
+            public int compare(Competitor c1, Competitor c2) {
+                return c1.getIdentifier().compareTo(c2.getIdentifier());
+            }
+        });
+        runningResults.add(athleteC); // Gold
+        runningResults.add(athleteA); // Silver
+        when(competitionResultFetcher.getResult(runningCompetition)).thenReturn(runningResults);
+
+        mjtOlympics.updateMedalStatistics(runningCompetition);
+
         TreeSet<String> nationsRankList = mjtOlympics.getNationsRankList();
-        assertEquals(List.of("NationA", "NationB", "NationC"), new ArrayList<>(nationsRankList));
+        assertEquals(List.of("NationA", "NationB", "NationC"), new ArrayList<>(nationsRankList),
+            "Nations should be ranked by total medals with ties broken alphabetically.");
     }
 
     @Test

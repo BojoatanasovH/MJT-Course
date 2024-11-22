@@ -36,12 +36,12 @@ public record Competition(String name, String discipline, Set<Competitor> compet
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Competition that = (Competition) o;
-        return Objects.equals(name, that.name) && Objects.equals(discipline, that.discipline) &&
-            Objects.equals(competitors, that.competitors);
+        return Objects.equals(name, that.name) && Objects.equals(discipline, that.discipline)
+            && Objects.equals(competitors, that.competitors);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, discipline);
+        return Objects.hash(name, discipline, competitors);
     }
 }

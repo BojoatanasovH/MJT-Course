@@ -29,9 +29,6 @@ class NationMedalComparatorTest {
         when(olympics.getTotalMedals("USA")).thenReturn(10);
         when(olympics.getTotalMedals("UK")).thenReturn(5);
 
-        System.out.println("USA Medals: " + olympics.getTotalMedals("USA"));
-        System.out.println("UK Medals: " + olympics.getTotalMedals("UK"));
-
         assertTrue(comparator.compare("USA", "UK") < 0);
         assertTrue(comparator.compare("UK", "USA") > 0);
     }
@@ -43,8 +40,6 @@ class NationMedalComparatorTest {
         a.addMedal(Medal.GOLD);
         a.addMedal(Medal.GOLD);
         a.addMedal(Medal.SILVER);
-
-        System.out.println(olympics.getTotalMedals("a"));
     }
 
     @Test
