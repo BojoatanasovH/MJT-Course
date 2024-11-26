@@ -6,7 +6,12 @@
 *.iml
 *.ipr
 out/
+<<<<<<< HEAD
 *.jpg
 *.jpeg
 *.png
 *.bmp
+=======
+lib/
+*.zip
+>>>>>>> bb82b3be4a4d171369fec0e5686ee394472fb471
