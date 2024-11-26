@@ -6,3 +6,7 @@
 *.iml
 *.ipr
 out/
+*.jpg
+*.jpeg
+*.png
+*.bmp
