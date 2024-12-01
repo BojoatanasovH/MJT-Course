@@ -10,6 +10,9 @@ public class LuminosityGrayscale implements GrayscaleAlgorithm {
 
     @Override
     public BufferedImage process(BufferedImage image) {
+        if (image == null) {
+            throw new IllegalArgumentException("Image cannot be null");
+        }
         int width = image.getWidth();
         int height = image.getHeight();
 

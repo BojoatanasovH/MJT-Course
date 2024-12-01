@@ -35,6 +35,6 @@ public class SobelEdgeDetectionTest {
 
     @Test
     void testProcessNullImageThrowsException() {
-        assertThrows(NullPointerException.class, () -> sobelEdgeDetection.process(null));
+        assertThrows(IllegalArgumentException.class, () -> sobelEdgeDetection.process(null));
     }
 }

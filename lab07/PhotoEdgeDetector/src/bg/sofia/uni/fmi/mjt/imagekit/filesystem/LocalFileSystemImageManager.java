@@ -15,7 +15,7 @@ public class LocalFileSystemImageManager implements FileSystemImageManager {
         }
 
         if (!imageFile.exists() || !imageFile.isFile()) {
-            throw new IOException("Files does not exists or is not regular" + imageFile.getAbsolutePath());
+            throw new IOException("Files does not exists or is not regular");
         }
 
         String fileName = imageFile.getName().toLowerCase();
@@ -32,7 +32,6 @@ public class LocalFileSystemImageManager implements FileSystemImageManager {
         if (imageDirectory == null) {
             throw new IllegalArgumentException("Image directory cannot be null");
         }
-
         if (!imageDirectory.exists() || !imageDirectory.isDirectory()) {
             throw new IOException("Image directory does not exist or is not a directory");
         }
@@ -41,9 +40,7 @@ public class LocalFileSystemImageManager implements FileSystemImageManager {
         if (files == null) {
             throw new IOException("Failed to list files in directory");
         }
-
         List<BufferedImage> images = new ArrayList<>();
-
         for (File file : files) {
             if (file.isFile()) {
                 String name = file.getName();
@@ -53,7 +50,6 @@ public class LocalFileSystemImageManager implements FileSystemImageManager {
                         "Directory contains files that are not of the supported formats: " + file.getName());
                 }
             }
-
             try {
                 images.add(loadImage(file));
             } catch (IOException e) {
@@ -72,14 +68,7 @@ public class LocalFileSystemImageManager implements FileSystemImageManager {
         if (imageFile.exists()) {
             throw new IOException("File already exists: " + imageFile.getAbsolutePath());
         }
-        String format = getFormat(imageFile);
 
-        if (!ImageIO.write(image, format, imageFile)) {
-            throw new IOException("Failed to save image: " + imageFile.getAbsolutePath());
-        }
-    }
-
-    private static String getFormat(File imageFile) throws IOException {
         File parentDirectory = imageFile.getParentFile();
         if (parentDirectory == null || !parentDirectory.exists()) {
             throw new IOException("Parent directory does not exist");
@@ -92,6 +81,9 @@ public class LocalFileSystemImageManager implements FileSystemImageManager {
         }
 
         String[] nameSplit = name.split("\\.");
-        return nameSplit[nameSplit.length - 1];
+        String format = nameSplit[nameSplit.length - 1];
+        if (!ImageIO.write(image, format, imageFile)) {
+            throw new IOException("Failed to save image: " + imageFile.getAbsolutePath());
+        }
     }
 }

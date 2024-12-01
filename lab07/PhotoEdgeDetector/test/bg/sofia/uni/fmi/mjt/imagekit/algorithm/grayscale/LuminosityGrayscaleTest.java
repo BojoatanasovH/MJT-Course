@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class LuminosityGrayscaleTest {
     private final LuminosityGrayscale luminosityGrayscale = new LuminosityGrayscale();
@@ -25,5 +26,10 @@ public class LuminosityGrayscaleTest {
 
         int grayRed = new Color(grayscaleImage.getRGB(0, 0)).getRed();
         int grayGreen = new Color(grayscaleImage.getRGB(0, 1)).getRed();
+    }
+
+    @Test
+    void testProcessWithNullImageThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> luminosityGrayscale.process(null));
     }
 }
